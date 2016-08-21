@@ -3,100 +3,69 @@
 var express = require('express');
 
 var bookRouter = express.Router();
+var sql = require('mssql');
 
-var books = [
-    {
-        title: 'War and Peace',
-        genre: 'Historical Fiction',
-        author: 'Lev Nikolayevich Tolstoy',
-        read: false
-    },
-    {
-        title: 'Stranger in a Strange Land',
-        genre: 'Science Fiction',
-        author: 'Robert A Heinlein',
-        read: true
-    },
-    {
-        title: 'The Gene: An Intimate History',
-        genre: 'Medical History',
-        author: 'Siddhartha Mukherjee',
-        read: true
-    },
-    {
-        title: 'Les Misérables',
-        genre: 'Historical Fiction',
-        author: 'Victor Hugo',
-        read: false
-    },
-    {
-        title: 'The Time Machine',
-        genre: 'Science Fiction',
-        author: 'H. G. Wells',
-        read: false
-    },
-    {
-        title: 'A Journey into the Center of the Earth',
-        genre: 'Science Fiction',
-        author: 'Jules Verne',
-        read: false
-    },
-    {
-        title: 'The Dark World',
-        genre: 'Fantasy',
-        author: 'Henry Kuttner',
-        read: false
-    },
-    {
-        title: 'The Wind in the Willows',
-        genre: 'Fantasy',
-        author: 'Kenneth Grahame',
-        read: false
-    },
-    {
-        title: 'Life On The Mississippi',
-        genre: 'History',
-        author: 'Mark Twain',
-        read: false
-    },
-    {
-        title: 'Childhood',
-        genre: 'Biography',
-        author: 'Lev Nikolayevich Tolstoy',
-        read: false
-    },
-    {
-        title: 'Mr. Mecedes',
-        genre: 'Thriller',
-        author: 'Stephen King',
-        read: true
-    }];
+var emptyBook = {
+    title: 'Book of non-existence',
+    genre: 'Ultimate Fiction',
+    author: 'Book Unfound',
+    haveRead: false
+};
 
 var routerFactory = function (navItems) {
-    bookRouter.route('/')
-        .get(function (req, res) {
+
+bookRouter.route('/')
+    .get(function (req, res) {
+        var request = new sql.Request();
+
+        request.query('select * from books', function (err, recordset) {
+            if (err) {
+                console.log(err);
+                return;
+            }
             res.render('books', {
                 title: 'Fledgling books',
                 nav: navItems,
-                books: books
+                books: recordset
             });
         });
 
-    bookRouter.route('/:id')
-        .get(function (req, res) {
-            var id = req.params.id;
-            if (id >= 0 && id < books.length) {
-                res.render('book', {
-                    title: 'Fledgling books',
-                    nav: navItems,
-                    book: books[id]
-                });
-            } else {
-                res.send("Book not found.");
-            }
-        });
+    });
 
-    return bookRouter;
+bookRouter.route('/:id')
+    .get(function (req, res) {
+
+        var renderCallback = function (err, recordset) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+
+            if (recordset.length == 0) {
+                recordset = [emptyBook];
+            }
+
+            res.render('book', {
+                title: 'Fledgling books',
+                nav: navItems,
+                book: recordset[0]
+            });
+        };
+
+        var ps = new sql.PreparedStatement();
+        ps.input('id', sql.Int);
+        ps.prepare('select * from books where id=@id', function (err) {
+            if (err) {
+                console.log(err);
+                return;
+            }
+            ps.execute({
+                id: req.params.id
+            }, renderCallback);
+        });
+    });
+
+return bookRouter;
 };
 
 

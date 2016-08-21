@@ -3,6 +3,24 @@
 var express = require('express');
 
 var app = express();
+var sql = require('mssql');
+
+var sqlconfig = {
+    user: 'obadonke@nodetest',
+    password: 'n0detest2016!',
+    server: 'nodetest.database.windows.net', // You can use 'localhost\\instance' to connect to named instance 
+    database: 'NodeExpress',
+ 
+    options: {
+        encrypt: true
+    }
+};
+
+sql.connect(sqlconfig, function(err) {
+    if (err) {
+        console.log(err);
+    }
+});
 
 var port = process.env.PORT || 5000;
 
