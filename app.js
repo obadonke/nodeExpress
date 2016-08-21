@@ -4,10 +4,11 @@ var express = require('express');
 
 var app = express();
 var sql = require('mssql');
+var auth = require('./credentials');
 
 var sqlconfig = {
-    user: 'obadonke@nodetest',
-    password: 'n0detest2016!',
+    user: auth.user,
+    password: auth.password,
     server: 'nodetest.database.windows.net', // You can use 'localhost\\instance' to connect to named instance 
     database: 'NodeExpress',
  
