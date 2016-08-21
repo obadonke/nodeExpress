@@ -2,10 +2,8 @@ const gulp = require('gulp');
 const eslint = require('gulp-eslint');
 const nodemon = require('gulp-nodemon');
 
-const jsFiles = ['*.js', 'src/**/*.js'];
-
 gulp.task('style', function () {
-    return gulp.src(jsFiles)
+    return gulp.src(['*.js', 'src/**/*.js'])
         .pipe(eslint())
         .pipe(eslint.format())
         .pipe(eslint.failAfterError());
@@ -41,7 +39,9 @@ gulp.task('serve', ['style', 'inject'], function () {
         env: {
             'PORT': 3000
         },
-        watch: jsFiles
+        ignore: ['.git', '/public/lib'],
+        ext: 'js html',
+        verbose: true
     };
 
     return nodemon(options)
