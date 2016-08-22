@@ -66,4 +66,4 @@ var books = [
         haveRead: true
     }];
 
-exports = books;
+module.exports = books;
