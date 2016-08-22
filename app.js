@@ -14,7 +14,7 @@ var navItems = [
       text: 'Authorz'
     }];
 
-var mongodb = require('mongodb');
+var mongodb = require('mongodb').MongoClient;
 var mongoConnect = function (callback) {
    var url = 'mongodb://localhost:27017/nodeExpressLibraryApp';
 
@@ -28,7 +28,7 @@ var mongoConnect = function (callback) {
    });
 };
 
-var bookRouter = require('./src/routes/books')(navItems);
+var bookRouter = require('./src/routes/books')(navItems, mongoConnect);
 
 var adminRouter = require('./src/routes/admin')(mongoConnect);
 
