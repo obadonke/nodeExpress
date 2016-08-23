@@ -1,6 +1,7 @@
 const gulp = require('gulp');
 const eslint = require('gulp-eslint');
 const nodemon = require('gulp-nodemon');
+const open = require('gulp-open');
 
 gulp.task('style', function () {
     return gulp.src(['*.js', 'src/**/*.js'])
@@ -32,6 +33,11 @@ gulp.task('inject', function () {
         .pipe(gulp.dest('./src/views'));
 });
 
+gulp.task('open', () => {
+  gulp.src('')
+      .pipe(open({ uri: 'http://localhost:3000/' }));
+});
+
 gulp.task('serve', ['style', 'inject'], function () {
     var options = {
         script: 'app.js',
@@ -49,3 +55,5 @@ gulp.task('serve', ['style', 'inject'], function () {
             console.log('Restarting...');
         });
 });
+
+gulp.task('test-serve', ['serve', 'open'], () => {});

@@ -19,6 +19,7 @@
     "gulp-eslint": "^3.0.1",
     "gulp-inject": "^4.1.0",
     "gulp-nodemon": "^2.1.0",
+    "gulp-open": "^2.0.0",
     "wiredep": "^4.0.0"
   }
 }
