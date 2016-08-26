@@ -33,7 +33,7 @@ gulp.task('inject', function () {
         .pipe(gulp.dest('./src/views'));
 });
 
-gulp.task('serve', ['style', 'inject'], function () {
+gulp.task('serve-only', function () {
     var options = {
         script: 'app.js',
         delayTime: 1,
@@ -51,9 +51,11 @@ gulp.task('serve', ['style', 'inject'], function () {
         });
 });
 
+gulp.task('serve', ['style', 'inject', 'serve-only']);
+
 gulp.task('open', () => {
   gulp.src('')
       .pipe(open({ uri: 'http://localhost:3000/' }));
 });
 
-gulp.task('test-serve', ['serve', 'open']);
+gulp.task('serve-open', ['serve', 'open']);
