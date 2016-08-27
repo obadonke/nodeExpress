@@ -3,16 +3,33 @@
 var express = require('express');
 var authRouter = express.Router();
 //var ObjectId = require('mongodb').ObjectID;
+var passport = require('passport');
 
-var routerFactory = function() {
+var routerFactory = function(mongoConnect) {
 
     authRouter.route('/signup')
         .post(function(req, res) {
             console.log(req.body);
-            req.login(req.body, () => {
-                res.redirect('profile');
+            mongoConnect(function(db) {
+                var collection = db.collection('users');
+                var user = {
+                    username: req.body.userName,
+                    password: req.body.password
+                };
+
+                collection.insert(user, function(err, results) {
+                    req.login(results.ops[0], () => {
+                        res.redirect('profile');
+                    });
+                });
             });
         });
+
+    authRouter.route('/signin')
+        .post(passport.authenticate('local', {
+            failureRedirect: '/',
+            successRedirect: '/auth/profile'
+        }));
 
     authRouter.route('/profile')
         .get(function(req, res) {
