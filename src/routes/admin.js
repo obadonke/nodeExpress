@@ -1,7 +1,7 @@
 var express = require('express');
 var adminRouter = express.Router();
 
-var theBooks = require('./hardcodedBooks');
+var theBooks = require('../controllers/hardcodedBooks');
 
 var router = function (mongoConnect) {
    adminRouter.route('/addBooks')

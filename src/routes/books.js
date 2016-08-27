@@ -4,7 +4,8 @@ var express = require('express');
 var bookRouter = express.Router();
 
 var routerFactory = function(navItems, mongoConnect) {
-    var bookController = require('../controllers/books')(null, navItems, mongoConnect);
+    var bookService = require('../services/goodReads')();
+    var bookController = require('../controllers/books')(bookService, navItems, mongoConnect);
 
     bookRouter.use(bookController.middleware);
 

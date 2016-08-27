@@ -9,9 +9,9 @@ var emptyBook = {
 
 var bookController = function(bookService, navItems, mongoConnect) {
     var middleware = function(req, res, next) {
-        if (!req.user) {
-            return res.redirect('/');
-        }
+        // if (!req.user) {
+        //     return res.redirect('/');
+        // }
         return next();
     };
 
@@ -55,10 +55,15 @@ var bookController = function(bookService, navItems, mongoConnect) {
     };
 
     var getById = function(req, res) {
-        res.render('book', {
-            title: 'Fledgling books',
-            nav: navItems,
-            book: req.book
+        bookService.getBookById(req.bookId, function(err, bookEx) {
+            if (err) return;
+
+            req.book.bookEx = bookEx;
+            res.render('book', {
+                title: 'Fledgling books',
+                nav: navItems,
+                book: req.book
+            });
         });
     };
 
