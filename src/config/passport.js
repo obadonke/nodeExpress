@@ -1,6 +1,6 @@
 var passport = require('passport');
 
-module.exports = (app) => {
+module.exports = (app, mongoConnect) => {
     app.use(passport.initialize());
     app.use(passport.session());
 
@@ -12,6 +12,6 @@ module.exports = (app) => {
       done(null, user);
    });
 
-   require('./strategies/local.strategy')();
-   
+   require('./strategies/local.strategy')(mongoConnect);
+
 };

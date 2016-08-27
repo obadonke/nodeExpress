@@ -18,8 +18,9 @@ var routerFactory = function(mongoConnect) {
                 };
 
                 collection.insert(user, function(err, results) {
+                    db.close();
                     req.login(results.ops[0], () => {
-                        res.redirect('profile');
+                        res.redirect('/auth/profile');
                     });
                 });
             });
@@ -32,6 +33,12 @@ var routerFactory = function(mongoConnect) {
         }));
 
     authRouter.route('/profile')
+        .all(function(req, res, next) {
+            if (!req.user) {
+                return res.redirect('/');
+            }
+            next();
+        })
         .get(function(req, res) {
             res.json(req.user);
         });

@@ -40,7 +40,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(cookieParser());
 app.use(session({secret:"nodeExpress"}));
-require('./src/config/passport')(app);
+require('./src/config/passport')(app, mongoConnect);
 
 app.set('views', './src/views');
 
