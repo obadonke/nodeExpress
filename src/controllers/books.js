@@ -4,6 +4,7 @@ var emptyBook = {
     title: 'Book of non-existence',
     genre: 'Ultimate Fiction',
     author: 'Book Unfound',
+    isbn13: '9781476754451',
     haveRead: false
 };
 
@@ -55,7 +56,7 @@ var bookController = function(bookService, navItems, mongoConnect) {
     };
 
     var getById = function(req, res) {
-        bookService.getBookById(req.bookId, function(err, bookEx) {
+        bookService.getBookByIsbn(req.book.isbn13, function(err, bookEx) {
             if (err) return;
 
             req.book.bookEx = bookEx;

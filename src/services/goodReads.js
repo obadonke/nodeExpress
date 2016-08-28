@@ -3,11 +3,13 @@ var xml2js = require('xml2js');
 var parser = xml2js.Parser({explicitArray: false});
 var auth = require('../../credentials');
 
+//TODO: Goodreads requires attribution for any data pulled from its API
+
 var goodreadsService = () => {
-    var getBookById = function(id, callback) {
+    var getBookByIsbn = function(id, callback) {
     var options = {
             host: 'www.goodreads.com',
-            path: '/book/title.xml?author=Arthur+Conan+Doyle&key=' + auth.goodreads.key + '&title=Hound+of+the+Baskervilles'
+            path: '/book/isbn/' + id + '?key=' + auth.goodreads.key
     };
 
     var httpCallback = (res) => {
@@ -30,7 +32,7 @@ var goodreadsService = () => {
 };
 
     return {
-        getBookById: getBookById
+        getBookByIsbn: getBookByIsbn
     };
 };
 
